@@ -1,31 +1,59 @@
+<script context="module">
+	/** @type {import('@sveltejs/kit').Load} */
+	export async function load({ params, fetch, url }) {
+		const { collection = 'cryptoskulls' } = url.searchParams;
+
+		const res = await fetch(`/assets?collection=${collection}`);
+
+		if (res.ok) {
+			return {
+				props: res.json()
+			};
+		}
+
+		return {
+			status: res.status,
+			error: new Error(`Could not load ${url}`)
+		};
+	}
+</script>
+
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import Collection from '$lib/components/Collection.svelte';
+	import { selectedCollection } from '$lib/store';
 
-	let images = [];
+	/** @type {import('$lib/schemas').Asset[]} */
+	export let assets;
+	let otherAssets = assets;
 
-	onMount(async () => {
-		const arr = [];
-		const res = await fetch('/assets');
+	let options = [
+		{
+			label: 'CryptoSkulls',
+			value: 'cryptoskulls'
+		},
+		{
+			label: 'Flow-Rs',
+			value: 'flow-rs'
+		}
+	];
+
+	const getCollectionAssets = async () => {
+		console.log($selectedCollection);
+
+		const res = await fetch(`/assets?collection=${$selectedCollection}`);
 
 		const data = await res.json();
 
-		console.log(data);
-
-		for (let asset of data.assets) {
-			arr.push(asset.image_url);
-		}
-
-		images = arr;
-	});
-
-	console.log(images);
-
-	$: console.log(images);
+		otherAssets = data.assets;
+	};
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<select bind:value={$selectedCollection}>
+	{#each options as opt}
+		<option value={opt.value}>{opt.label}</option>
+	{/each}
+</select>
+<button on:click={() => getCollectionAssets()}>OK</button>
+<br />
 
-{#each images as image}
-	<img src={image} alt="img" />
-{/each}
+<Collection assets={otherAssets} />
