@@ -1,4 +1,5 @@
-import { string, object, union, number, TypeOf, boolean } from 'zod';
+import { string, object, union, number, boolean, any } from 'zod';
+import type { TypeOf } from 'zod';
 
 const str = string();
 const url = str.url();
@@ -52,7 +53,7 @@ export const displayData = object({
 
 export const collection = object({
 	banner_image_url: url.nullable(),
-	chat_url: str,
+	chat_url: str.nullable(),
 	created_date: str,
 	default_to_fiat: boolean(),
 	description: str,
@@ -60,7 +61,7 @@ export const collection = object({
 	dev_seller_fee_basis_points: str,
 	discord_url: str,
 	display_data: displayData,
-	external_url: str,
+	external_url: str.nullable(),
 	featured: boolean(),
 	featured_image_url: url.nullable(),
 	hidden: boolean(),
@@ -68,19 +69,19 @@ export const collection = object({
 	instagram_username: str,
 	is_subject_to_whitelist: boolean(),
 	large_image_url: str,
-	medium_username: str,
+	medium_username: str.nullable(),
 	name: str,
 	only_proxied_transfers: boolean(),
 	opensea_buyer_fee_basis_points: str,
 	opensea_seller_fee_basis_points: str,
-	payout_address: str,
+	payout_address: str.nullable(),
 	require_email: boolean(),
 	safelist_request_status: str,
-	short_description: str,
+	short_description: str.nullable(),
 	slug: str,
-	telegram_url: str,
-	twitter_username: str,
-	wiki_url: url
+	telegram_url: str.nullable(),
+	twitter_username: str.nullable(),
+	wiki_url: url.nullable()
 });
 
 export const assetContract = object({
@@ -99,13 +100,13 @@ export const assetContract = object({
 	only_proxied_transfers: boolean(),
 	opensea_buyer_fee_basis_points: number(),
 	opensea_seller_fee_basis_points: number(),
-	opensea_version: str,
+	opensea_version: str.nullable(),
 	owner: number(),
-	payout_address: str,
+	payout_address: str.nullable(),
 	schema_name: str,
 	seller_fee_basis_points: number(),
 	symbol: str,
-	total_supply: str
+	total_supply: str.nullable()
 });
 
 export const asset = object({
@@ -114,28 +115,28 @@ export const asset = object({
 	asset_contract: assetContract,
 	background_color: str.nullable(),
 	collection,
-	decimals: number(),
+	decimals: number().nullable(),
 	description: str,
 	external_link: str.nullable(),
 	id: number(),
-	image_original_url: url,
+	image_original_url: url.nullable(),
 	image_preview_url: url,
 	image_thumbnail_url: url,
 	image_url: url.nullable(),
 	is_presale: boolean(),
-	last_sale: str,
-	listing_date: str,
+	last_sale: any().nullable(),
+	listing_date: str.nullable(),
 	name: str,
 	num_sales: number(),
 	owner,
 	permalink: url,
-	sell_orders: str,
+	sell_orders: any().array().nullable(),
 	token_id: str,
-	token_metadata: str,
-	top_bid: str,
+	token_metadata: str.nullable(),
+	top_bid: str.nullable(),
 	traits: trait.array(),
-	transfer_fee: str,
-	transfer_fee_payment_token: str
+	transfer_fee: str.nullable(),
+	transfer_fee_payment_token: str.nullable()
 });
 export type Asset = TypeOf<typeof asset>;
 
