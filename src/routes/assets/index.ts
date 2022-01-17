@@ -1,11 +1,9 @@
-import { API_KEY, COLLECTION_NAME, OPENSEA_URL } from '$lib/constants';
+import { COLLECTION_NAME, OPENSEA_URL } from '$lib/constants';
 import { doGet } from '$lib/axios';
-import { Asset, asset, assetsResponse, AssetsResponse } from '$lib/schemas';
+import { Asset, assetsResponse, AssetsResponse } from '$lib/schemas';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get({ params }) {
-	console.log('api key', API_KEY);
-
 	const { offset = '0', limit = '30' } = params;
 
 	let assets: Asset[] | null;
@@ -19,7 +17,7 @@ export async function get({ params }) {
 		assets = res.assets;
 	} catch (err) {
 		console.log(err);
-		assets = null;
+		assets = [];
 	}
 
 	return {

@@ -1,4 +1,4 @@
-import { string, object, union, number, TypeOf } from 'zod';
+import { string, object, union, number, TypeOf, any } from 'zod';
 
 export const user = object({
 	username: string().nullable(),
@@ -8,7 +8,7 @@ export type User = TypeOf<typeof user>;
 
 export const account = object({
 	address: string(),
-	user,
+	user: user.nullable(),
 	config: string()
 });
 export type Account = TypeOf<typeof account>;
@@ -25,7 +25,7 @@ export const contract = object({
 	symbol: string(),
 	image_url: string().url().nullable(),
 	description: string(),
-	external_link: string().url().nullable()
+	external_link: string().nullable()
 });
 export type Contract = TypeOf<typeof contract>;
 
@@ -33,11 +33,11 @@ export const asset = object({
 	token_ids: string().optional(),
 	image_url: string().url().nullable(),
 	background_color: string().nullable(),
-	external_link: string().url().nullable(),
+	external_link: string().nullable(),
 	asset_contract: contract,
 	owner: account,
 	traits: trait.array(),
-	last_sale: string().nullable()
+	last_sale: any().nullable()
 });
 export type Asset = TypeOf<typeof asset>;
 

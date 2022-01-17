@@ -1,13 +1,17 @@
 import axios from 'axios';
 import { API_KEY } from '$lib/constants';
 
-const defaultHeaders = {};
+const defaultHeaders = {
+	'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'
+};
 if (API_KEY) defaultHeaders['X-API-KEY'] = API_KEY;
 
 export async function doGet(url: string, schema?: any, safe: boolean = false) {
 	try {
 		const res = await axios.get(url, {
-			...defaultHeaders
+			headers: {
+				...defaultHeaders
+			}
 		});
 
 		if (schema) {
