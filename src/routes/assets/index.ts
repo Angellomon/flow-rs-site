@@ -3,14 +3,17 @@ import { doGet } from '$lib/axios';
 import { Asset, assetsResponse, AssetsResponse } from '$lib/schemas';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get({ params }) {
-	const { offset = '0', limit = '30' } = params;
+export async function get({ params, url }) {
+	console.log(url);
 
-	let assets: Asset[] | null;
+	let assets: Asset[];
+	const collection = url.searchParams.get('collection');
+	const offset = url.searchParams.get('offset') || '0';
+	const limit = url.searchParams.get('limit') || '30';
 
 	try {
 		const res: AssetsResponse = await doGet(
-			`${OPENSEA_URL}/assets?collection=${COLLECTION_NAME}&offset=${offset}&limit=${limit}`,
+			`${OPENSEA_URL}/assets?collection=${collection}&offset=${offset}&limit=${limit}`,
 			assetsResponse
 		);
 
